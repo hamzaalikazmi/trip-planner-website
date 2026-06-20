@@ -25,7 +25,7 @@ function App() {
     setSelectedDestination({
       title: `Custom ${customTripDetails.days}-Day Itinerary (${customTripDetails.guests} Travelers)`,
       category: 'Custom',
-      price: `$${customTripDetails.totalPrice.toLocaleString()}`,
+      price: `PKR ${customTripDetails.totalPrice.toLocaleString()}`,
     });
     setIsBookingOpen(true);
   };

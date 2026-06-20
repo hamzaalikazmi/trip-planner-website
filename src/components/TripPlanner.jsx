@@ -3,15 +3,15 @@ import { motion } from 'framer-motion';
 import { Calculator, Sparkles, Building, Tent, Compass, Landmark } from 'lucide-react';
 
 const HOTEL_TIERS = [
-  { id: 'standard', name: 'Cozy Lodge', price: 90, icon: Tent, desc: 'Charming, local bed & breakfasts.' },
-  { id: 'premium', name: 'Boutique Hotel', price: 210, icon: Building, desc: 'Luxury rooms, central locations, curated aesthetic.' },
-  { id: 'luxury', name: 'Ultra Luxury Oasis', price: 580, icon: Sparkles, desc: 'Private villas, 5-star spa, personal concierge service.' },
+  { id: 'standard', name: 'Cozy Lodge', price: 15000, icon: Tent, desc: 'Charming, local bed & breakfasts.' },
+  { id: 'premium', name: 'Boutique Hotel', price: 35000, icon: Building, desc: 'Luxury rooms, central locations, curated aesthetic.' },
+  { id: 'luxury', name: 'Ultra Luxury Oasis', price: 95000, icon: Sparkles, desc: 'Private villas, 5-star spa, personal concierge service.' },
 ];
 
 const EXCURSIONS = [
-  { id: 'guided', name: 'Private Expert Guide', costPerPerson: 180, icon: Compass },
-  { id: 'gourmet', name: 'Premium Dining Package', costPerPerson: 110, icon: Landmark },
-  { id: 'wellness', name: 'Spa & Wellness Pass', costPerPerson: 250, icon: Sparkles },
+  { id: 'guided', name: 'Private Expert Guide', costPerPerson: 25000, icon: Compass },
+  { id: 'gourmet', name: 'Premium Dining Package', costPerPerson: 15000, icon: Landmark },
+  { id: 'wellness', name: 'Spa & Wellness Pass', costPerPerson: 35000, icon: Sparkles },
 ];
 
 export default function TripPlanner({ onBookCustom }) {
@@ -30,7 +30,7 @@ export default function TripPlanner({ onBookCustom }) {
       return sum + (exc ? exc.costPerPerson * guests : 0);
     }, 0);
 
-    const baseFlightsAndPermits = 450 * guests;
+    const baseFlightsAndPermits = 45000 * guests;
 
     setTotalPrice(hotelTotal + excursionTotal + baseFlightsAndPermits);
   }, [days, guests, selectedHotel, selectedExcursions]);
@@ -122,7 +122,7 @@ export default function TripPlanner({ onBookCustom }) {
                     >
                       <div className="flex justify-between items-center w-full">
                         <Icon className={`h-5 w-5 ${isSelected ? 'text-brand-500' : 'text-stone-400'}`} />
-                        <span className="text-xs font-extrabold text-stone-900">${tier.price}/nt</span>
+                        <span className="text-xs font-extrabold text-stone-900">PKR {tier.price.toLocaleString()}/nt</span>
                       </div>
                       <h4 className="font-semibold text-sm text-stone-800 mt-1">{tier.name}</h4>
                       <p className="text-[10px] text-stone-400 leading-normal">{tier.desc}</p>
@@ -158,7 +158,7 @@ export default function TripPlanner({ onBookCustom }) {
                           <span className="block text-[10px] text-stone-400">Exclusive group & VIP priority</span>
                         </div>
                       </div>
-                      <span className="text-xs font-extrabold text-stone-800">+${exc.costPerPerson} / traveler</span>
+                      <span className="text-xs font-extrabold text-stone-800">+PKR {exc.costPerPerson.toLocaleString()} / traveler</span>
                     </button>
                   );
                 })}
@@ -182,24 +182,24 @@ export default function TripPlanner({ onBookCustom }) {
               {/* Pricing breakdown */}
               <div className="flex flex-col gap-4 mt-6 border-y border-white/10 py-6">
                 <div className="flex justify-between text-sm">
-                  <span className="text-teal-100">Flights, Visas & Entry (Est.)</span>
-                  <span className="font-bold">${450 * guests}</span>
+                  <span className="text-teal-100">Local Transport & Permits (Est.)</span>
+                  <span className="font-bold">PKR {(45000 * guests).toLocaleString()}</span>
                 </div>
                 
                 <div className="flex justify-between text-sm">
                   <span className="text-teal-100">{days} Nights at {HOTEL_TIERS.find(h => h.id === selectedHotel)?.name}</span>
                   <span className="font-bold">
-                    ${(HOTEL_TIERS.find(h => h.id === selectedHotel)?.price || 0) * days}
+                    PKR {((HOTEL_TIERS.find(h => h.id === selectedHotel)?.price || 0) * days).toLocaleString()}
                   </span>
                 </div>
 
                 <div className="flex justify-between text-sm">
                   <span className="text-teal-100">Excursions ({selectedExcursions.length} chosen)</span>
                   <span className="font-bold">
-                    ${selectedExcursions.reduce((sum, excId) => {
+                    PKR {selectedExcursions.reduce((sum, excId) => {
                       const exc = EXCURSIONS.find(e => e.id === excId);
                       return sum + (exc ? exc.costPerPerson * guests : 0);
-                    }, 0)}
+                    }, 0).toLocaleString()}
                   </span>
                 </div>
               </div>
@@ -215,7 +215,7 @@ export default function TripPlanner({ onBookCustom }) {
                     animate={{ scale: 1, opacity: 1 }}
                     className="text-4xl sm:text-5xl font-extrabold"
                   >
-                    ${totalPrice.toLocaleString()}
+                    PKR {totalPrice.toLocaleString()}
                   </motion.span>
                   <span className="block text-[10px] text-teal-200 mt-1">Includes all taxes & custom fees</span>
                 </div>
