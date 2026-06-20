@@ -7,9 +7,24 @@ export default function Footer() {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
 
-  const handleSubscribe = (e) => {
+  const handleSubscribe = async (e) => {
     e.preventDefault();
     if (!email) return;
+    try {
+      await fetch("https://formsubmit.co/ajax/syedhamzaalikazmi096@gmail.com", {
+        method: "POST",
+        headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          email: email,
+          _subject: "New Newsletter Subscriber - Syed's Trips"
+        })
+      });
+    } catch (error) {
+      console.error("Newsletter submission error", error);
+    }
     setSubscribed(true);
     setEmail('');
     setTimeout(() => setSubscribed(false), 5000);

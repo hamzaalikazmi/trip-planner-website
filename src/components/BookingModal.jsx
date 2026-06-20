@@ -7,11 +7,35 @@ export default function BookingModal({ isOpen, onClose, destinationData }) {
   const [email, setEmail] = useState('');
   const [date, setDate] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!name || !email) return;
-    setIsSubmitted(true);
+    setIsSubmitting(true);
+    try {
+      await fetch("https://formsubmit.co/ajax/syedhamzaalikazmi096@gmail.com", {
+        method: "POST",
+        headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          name: name,
+          email: email,
+          departure_month: date || 'Not specified',
+          selected_trip: destinationData ? destinationData.title : 'General Query',
+          trip_price: destinationData ? destinationData.price : 'N/A',
+          _subject: `New Booking Inquiry: ${destinationData ? destinationData.title : 'General'}`
+        })
+      });
+      setIsSubmitted(true);
+    } catch (error) {
+      console.error("Submission error", error);
+      setIsSubmitted(true);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleClose = () => {
@@ -113,12 +137,19 @@ export default function BookingModal({ isOpen, onClose, destinationData }) {
                   <div className="mt-2">
                     <motion.button
                       type="submit"
-                      className="w-full bg-brand-500 hover:bg-brand-600 text-white rounded-xl py-3.5 font-semibold text-sm flex items-center justify-center gap-2 shadow-md cursor-pointer"
+                      disabled={isSubmitting}
+                      className="w-full bg-brand-500 hover:bg-brand-600 text-white rounded-xl py-3.5 font-semibold text-sm flex items-center justify-center gap-2 shadow-md cursor-pointer disabled:opacity-50"
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                     >
-                      <Send className="h-4 w-4" />
-                      <span>Submit Inquiry</span>
+                      {isSubmitting ? (
+                        <span>Sending...</span>
+                      ) : (
+                        <>
+                          <Send className="h-4 w-4" />
+                          <span>Submit Inquiry</span>
+                        </>
+                      )}
                     </motion.button>
                   </div>
                 </form>
