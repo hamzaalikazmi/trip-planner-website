@@ -2,69 +2,70 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Star, MapPin, Calendar, Compass, ArrowRight } from 'lucide-react';
 
-import kyotoImg from '../assets/kyoto.png';
-import swissImg from '../assets/swiss.png';
-import baliImg from '../assets/hero_bg.png';
+import chittaKathaImg from '../assets/chitta_katha.png';
+import rattiGaliImg from '../assets/ratti_gali.png';
+import siriPayeImg from '../assets/siri_paye.png';
+import makraPeakImg from '../assets/makra_peak.png';
 
 const DESTINATIONS = [
   {
     id: 1,
-    title: 'Historic Temples & Gardens',
-    location: 'Kyoto, Japan',
-    category: 'Cultural',
-    price: '$1,890',
-    duration: '8 Days',
-    rating: '4.9',
-    image: kyotoImg,
-    description: 'Immerse yourself in Zen gardens, historic wooden pagodas, and traditional tea ceremonies during the breathtaking cherry blossom season.',
+    title: 'Chitta Katha Lake',
+    location: 'Shounter Valley, Azad Kashmir',
+    category: 'Lake',
+    price: '$380',
+    duration: '4 Days',
+    rating: '4.95',
+    image: chittaKathaImg,
+    description: 'Trek to the breathtaking turquoise alpine lake nested under the snow-capped peak of Mount Hari Parbat.',
   },
   {
     id: 2,
-    title: 'Alpine Cabin Escape',
-    location: 'Zermatt, Switzerland',
-    category: 'Mountain',
-    price: '$2,450',
-    duration: '6 Days',
-    rating: '4.8',
-    image: swissImg,
-    description: 'Relax in a high-end cozy wooden chalet in the Swiss Alps, surrounded by snowy forests and majestic views of the Matterhorn.',
+    title: 'Ratti Gali Lake',
+    location: 'Neelum Valley, Azad Kashmir',
+    category: 'Lake',
+    price: '$320',
+    duration: '3 Days',
+    rating: '4.9',
+    image: rattiGaliImg,
+    description: 'Discover the dreamlike red-alpine glacier lake, surrounded by wildflower meadows and steep mountain walls.',
   },
   {
     id: 3,
-    title: 'Uluwatu Tropical Sanctuary',
-    location: 'Bali, Indonesia',
-    category: 'Tropical',
-    price: '$1,290',
-    duration: '10 Days',
-    rating: '4.95',
-    image: baliImg,
-    description: 'Rejuvenate with seaside infinity pools, stunning cliffside sunrise views, sacred temple trails, and pristine beaches.',
+    title: 'Churko Peak',
+    location: 'Neelum Valley, Azad Kashmir',
+    category: 'Peak',
+    price: '$450',
+    duration: '5 Days',
+    rating: '4.8',
+    image: makraPeakImg,
+    description: 'Ascend to the summit of Churko Peak for a panoramic 360-degree vista of the surrounding snow-draped Neelum Valley peaks.',
   },
   {
     id: 4,
-    title: 'Amalfi Coast Skyline Resort',
-    location: 'Positano, Italy',
-    category: 'Tropical',
-    price: '$2,800',
-    duration: '7 Days',
-    rating: '4.9',
-    image: baliImg, // Reusing high-quality asset
-    description: 'Stroll through pastel-colored cliffside houses, sunbathe on Mediterranean beaches, and enjoy premium coastal cuisine.',
+    title: 'Makra Peak',
+    location: 'Kaghan Valley, Khyber Pakhtunkhwa',
+    category: 'Peak',
+    price: '$280',
+    duration: '2 Days',
+    rating: '4.75',
+    image: makraPeakImg,
+    description: 'Climb the iconic spider-shaped peak, offering a thrilling trek and striking views of Nanga Parbat on clear days.',
   },
   {
     id: 5,
-    title: 'Matterhorn Peak Expedition',
-    location: 'Valais, Switzerland',
-    category: 'Mountain',
-    price: '$3,100',
-    duration: '9 Days',
-    rating: '4.7',
-    image: swissImg, // Reusing high-quality asset
-    description: 'Embark on guided high-alpine trekking, enjoy panoramic cable-car trips, and warm up by luxurious stone hearths.',
+    title: 'Siri Paye Meadows',
+    location: 'Shogran, Khyber Pakhtunkhwa',
+    category: 'Meadow',
+    price: '$190',
+    duration: '2 Days',
+    rating: '4.85',
+    image: siriPayeImg,
+    description: 'Relax in the rolling green meadows of Siri Paye, floating above the clouds with stunning views of Makra Peak.',
   },
 ];
 
-const CATEGORIES = ['All', 'Tropical', 'Mountain', 'Cultural'];
+const CATEGORIES = ['All', 'Lake', 'Peak', 'Meadow'];
 
 export default function Destinations({ onSelectDestination }) {
   const [activeCategory, setActiveCategory] = useState('All');
