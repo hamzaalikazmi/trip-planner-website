@@ -37,9 +37,9 @@ const DESTINATIONS = [
     title: 'Churko Peak',
     location: 'Neelum Valley, Azad Kashmir',
     category: 'Peak',
-    originalPrice: 45000,
-    price: 'PKR 76,000',
-    duration: '5 Days',
+    originalPrice: 76000,
+    price: 'PKR  56,000',
+    duration: '4 Days',
     rating: '4.8',
     image: makraPeakImg,
     description: 'Ascend to the summit of Churko Peak for a panoramic 360-degree vista of the surrounding snow-draped Neelum Valley peaks.',
@@ -99,8 +99,8 @@ export default function Destinations({ onSelectDestination }) {
               key={cat}
               onClick={() => setActiveCategory(cat)}
               className={`relative px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 cursor-pointer ${activeCategory === cat
-                  ? 'text-white'
-                  : 'text-stone-600 hover:text-brand-500 hover:bg-stone-100'
+                ? 'text-white'
+                : 'text-stone-600 hover:text-brand-500 hover:bg-stone-100'
                 }`}
             >
               {activeCategory === cat && (
