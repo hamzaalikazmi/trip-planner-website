@@ -20,19 +20,24 @@ export default function TripPlanner({ onBookCustom }) {
   const [selectedHotel, setSelectedHotel] = useState('premium');
   const [selectedExcursions, setSelectedExcursions] = useState(['guided']);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [originalTotalPrice, setOriginalTotalPrice] = useState(0);
 
   useEffect(() => {
     const hotelPricePerNight = HOTEL_TIERS.find(h => h.id === selectedHotel)?.price || 0;
-    const hotelTotal = hotelPricePerNight * days;
+    const hotelOriginalTotal = hotelPricePerNight * days;
+    const hotelDiscountedTotal = hotelOriginalTotal * 0.8;
     
-    const excursionTotal = selectedExcursions.reduce((sum, excId) => {
+    const excursionOriginalTotal = selectedExcursions.reduce((sum, excId) => {
       const exc = EXCURSIONS.find(e => e.id === excId);
       return sum + (exc ? exc.costPerPerson * guests : 0);
     }, 0);
+    const excursionDiscountedTotal = excursionOriginalTotal * 0.8;
 
-    const baseFlightsAndPermits = 45000 * guests;
+    const baseFlightsOriginal = 45000 * guests;
+    const baseFlightsDiscounted = baseFlightsOriginal * 0.8;
 
-    setTotalPrice(hotelTotal + excursionTotal + baseFlightsAndPermits);
+    setOriginalTotalPrice(hotelOriginalTotal + excursionOriginalTotal + baseFlightsOriginal);
+    setTotalPrice(hotelDiscountedTotal + excursionDiscountedTotal + baseFlightsDiscounted);
   }, [days, guests, selectedHotel, selectedExcursions]);
 
   const toggleExcursion = (id) => {
@@ -120,9 +125,16 @@ export default function TripPlanner({ onBookCustom }) {
                           : 'border-stone-200 hover:border-stone-300 bg-white'
                       }`}
                     >
-                      <div className="flex justify-between items-center w-full">
-                        <Icon className={`h-5 w-5 ${isSelected ? 'text-brand-500' : 'text-stone-400'}`} />
-                        <span className="text-xs font-extrabold text-stone-900">PKR {tier.price.toLocaleString()}/nt</span>
+                      <div className="flex justify-between items-start w-full gap-2">
+                        <Icon className={`h-5 w-5 mt-0.5 ${isSelected ? 'text-brand-500' : 'text-stone-400'}`} />
+                        <div className="text-right">
+                          <span className="block text-[10px] text-stone-400 line-through font-medium">
+                            PKR {tier.price.toLocaleString()}
+                          </span>
+                          <span className="block text-xs font-extrabold text-stone-900">
+                            PKR {(tier.price * 0.8).toLocaleString()}/nt
+                          </span>
+                        </div>
                       </div>
                       <h4 className="font-semibold text-sm text-stone-800 mt-1">{tier.name}</h4>
                       <p className="text-[10px] text-stone-400 leading-normal">{tier.desc}</p>
@@ -158,7 +170,14 @@ export default function TripPlanner({ onBookCustom }) {
                           <span className="block text-[10px] text-stone-400">Exclusive group & VIP priority</span>
                         </div>
                       </div>
-                      <span className="text-xs font-extrabold text-stone-800">+PKR {exc.costPerPerson.toLocaleString()} / traveler</span>
+                      <div className="text-right">
+                        <span className="block text-[10px] text-stone-400 line-through font-medium">
+                          +PKR {exc.costPerPerson.toLocaleString()}
+                        </span>
+                        <span className="block text-xs font-extrabold text-stone-800">
+                          +PKR {(exc.costPerPerson * 0.8).toLocaleString()} / traveler
+                        </span>
+                      </div>
                     </button>
                   );
                 })}
@@ -183,41 +202,71 @@ export default function TripPlanner({ onBookCustom }) {
               <div className="flex flex-col gap-4 mt-6 border-y border-white/10 py-6">
                 <div className="flex justify-between text-sm">
                   <span className="text-teal-100">Local Transport & Permits (Est.)</span>
-                  <span className="font-bold">PKR {(45000 * guests).toLocaleString()}</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-teal-200/60 line-through">
+                      PKR {(45000 * guests).toLocaleString()}
+                    </span>
+                    <span className="font-bold">
+                      PKR {(45000 * guests * 0.8).toLocaleString()}
+                    </span>
+                  </div>
                 </div>
                 
                 <div className="flex justify-between text-sm">
                   <span className="text-teal-100">{days} Nights at {HOTEL_TIERS.find(h => h.id === selectedHotel)?.name}</span>
-                  <span className="font-bold">
-                    PKR {((HOTEL_TIERS.find(h => h.id === selectedHotel)?.price || 0) * days).toLocaleString()}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-teal-200/60 line-through">
+                      PKR {((HOTEL_TIERS.find(h => h.id === selectedHotel)?.price || 0) * days).toLocaleString()}
+                    </span>
+                    <span className="font-bold">
+                      PKR {(((HOTEL_TIERS.find(h => h.id === selectedHotel)?.price || 0) * days) * 0.8).toLocaleString()}
+                    </span>
+                  </div>
                 </div>
 
                 <div className="flex justify-between text-sm">
                   <span className="text-teal-100">Excursions ({selectedExcursions.length} chosen)</span>
-                  <span className="font-bold">
-                    PKR {selectedExcursions.reduce((sum, excId) => {
-                      const exc = EXCURSIONS.find(e => e.id === excId);
-                      return sum + (exc ? exc.costPerPerson * guests : 0);
-                    }, 0).toLocaleString()}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-teal-200/60 line-through">
+                      PKR {selectedExcursions.reduce((sum, excId) => {
+                        const exc = EXCURSIONS.find(e => e.id === excId);
+                        return sum + (exc ? exc.costPerPerson * guests : 0);
+                      }, 0).toLocaleString()}
+                    </span>
+                    <span className="font-bold">
+                      PKR {(selectedExcursions.reduce((sum, excId) => {
+                        const exc = EXCURSIONS.find(e => e.id === excId);
+                        return sum + (exc ? exc.costPerPerson * guests : 0);
+                      }, 0) * 0.8).toLocaleString()}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
 
             <div className="mt-8 flex flex-col gap-6">
-              <div className="flex items-baseline justify-between">
-                <span className="text-sm font-semibold text-teal-200">Total Estimate</span>
-                <div className="text-right">
+              <div className="flex justify-between items-start">
+                <div className="flex flex-col">
+                  <span className="text-sm font-semibold text-teal-200">Total Estimate</span>
+                  {originalTotalPrice > totalPrice && (
+                    <span className="text-[10px] bg-rose-500 text-white font-extrabold px-2 py-0.5 rounded-full mt-1.5 self-start uppercase tracking-wider animate-pulse">
+                      Save PKR {(originalTotalPrice - totalPrice).toLocaleString()}
+                    </span>
+                  )}
+                </div>
+                <div className="text-right flex flex-col items-end">
+                  <span className="text-sm text-teal-200/70 line-through font-medium">
+                    PKR {originalTotalPrice.toLocaleString()}
+                  </span>
                   <motion.span 
                     key={totalPrice}
                     initial={{ scale: 1.1, opacity: 0.8 }}
                     animate={{ scale: 1, opacity: 1 }}
-                    className="text-4xl sm:text-5xl font-extrabold"
+                    className="text-4xl sm:text-5xl font-extrabold text-white"
                   >
                     PKR {totalPrice.toLocaleString()}
                   </motion.span>
-                  <span className="block text-[10px] text-teal-200 mt-1">Includes all taxes & custom fees</span>
+                  <span className="block text-[10px] text-teal-200 mt-1">Includes 20% promotional discount</span>
                 </div>
               </div>
 

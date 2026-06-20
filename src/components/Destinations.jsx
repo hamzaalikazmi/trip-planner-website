@@ -13,7 +13,8 @@ const DESTINATIONS = [
     title: 'Chitta Katha Lake',
     location: 'Shounter Valley, Azad Kashmir',
     category: 'Lake',
-    price: 'PKR 85,000',
+    originalPrice: 85000,
+    price: 'PKR 68,000',
     duration: '4 Days',
     rating: '4.95',
     image: chittaKathaImg,
@@ -24,7 +25,8 @@ const DESTINATIONS = [
     title: 'Ratti Gali Lake',
     location: 'Neelum Valley, Azad Kashmir',
     category: 'Lake',
-    price: 'PKR 65,000',
+    originalPrice: 65000,
+    price: 'PKR 52,000',
     duration: '3 Days',
     rating: '4.9',
     image: rattiGaliImg,
@@ -35,7 +37,8 @@ const DESTINATIONS = [
     title: 'Churko Peak',
     location: 'Neelum Valley, Azad Kashmir',
     category: 'Peak',
-    price: 'PKR 95,000',
+    originalPrice: 45000,
+    price: 'PKR 76,000',
     duration: '5 Days',
     rating: '4.8',
     image: makraPeakImg,
@@ -46,7 +49,8 @@ const DESTINATIONS = [
     title: 'Makra Peak',
     location: 'Kaghan Valley, Khyber Pakhtunkhwa',
     category: 'Peak',
-    price: 'PKR 45,000',
+    originalPrice: 45000,
+    price: 'PKR 36,000',
     duration: '2 Days',
     rating: '4.75',
     image: makraPeakImg,
@@ -57,7 +61,8 @@ const DESTINATIONS = [
     title: 'Siri Paye Meadows',
     location: 'Shogran, Khyber Pakhtunkhwa',
     category: 'Meadow',
-    price: 'PKR 25,000',
+    originalPrice: 25000,
+    price: 'PKR 20,000',
     duration: '2 Days',
     rating: '4.85',
     image: siriPayeImg,
@@ -93,11 +98,10 @@ export default function Destinations({ onSelectDestination }) {
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              className={`relative px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 cursor-pointer ${
-                activeCategory === cat
+              className={`relative px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 cursor-pointer ${activeCategory === cat
                   ? 'text-white'
                   : 'text-stone-600 hover:text-brand-500 hover:bg-stone-100'
-              }`}
+                }`}
             >
               {activeCategory === cat && (
                 <motion.div
@@ -113,8 +117,8 @@ export default function Destinations({ onSelectDestination }) {
       </div>
 
       {/* Grid of Destination Cards */}
-      <motion.div 
-        layout 
+      <motion.div
+        layout
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
       >
         <AnimatePresence mode="popLayout">
@@ -130,21 +134,26 @@ export default function Destinations({ onSelectDestination }) {
             >
               {/* Card Image Container */}
               <div className="relative h-64 overflow-hidden">
-                <img 
-                  src={dest.image} 
+                <img
+                  src={dest.image}
                   alt={dest.title}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                 />
-                
+
                 {/* Rating Badge */}
                 <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-full flex items-center gap-1 shadow-sm">
                   <Star className="h-3.5 w-3.5 fill-amber-500 text-amber-500" />
                   <span className="text-xs font-bold text-stone-800">{dest.rating}</span>
                 </div>
 
-                {/* Category Tag */}
-                <div className="absolute top-4 right-4 bg-teal-500/90 backdrop-blur-md px-3 py-1 rounded-full">
-                  <span className="text-[10px] uppercase font-bold text-white tracking-wider">{dest.category}</span>
+                {/* Category & Sale Tags */}
+                <div className="absolute top-4 right-4 flex flex-col items-end gap-1.5 z-10">
+                  <div className="bg-teal-500/90 backdrop-blur-md px-3 py-1 rounded-full">
+                    <span className="text-[10px] uppercase font-bold text-white tracking-wider">{dest.category}</span>
+                  </div>
+                  <div className="bg-rose-500/95 backdrop-blur-md px-2.5 py-1 rounded-full shadow-md animate-pulse">
+                    <span className="text-[9px] uppercase font-extrabold text-white tracking-wider">Save 20%</span>
+                  </div>
                 </div>
 
                 {/* Hover Gradient Overlay */}
@@ -170,10 +179,15 @@ export default function Destinations({ onSelectDestination }) {
                 <div className="pt-4 border-t border-stone-100 flex items-center justify-between mt-auto">
                   <div>
                     <span className="block text-[10px] text-stone-400 font-bold uppercase tracking-wider">From</span>
-                    <span className="text-lg font-extrabold text-stone-900">{dest.price}</span>
-                    <span className="text-xs text-stone-500 font-normal"> / person</span>
+                    <div className="flex flex-col sm:flex-row sm:items-baseline gap-1">
+                      <span className="text-xs text-stone-400 line-through font-medium">
+                        PKR {dest.originalPrice.toLocaleString()}
+                      </span>
+                      <span className="text-lg font-extrabold text-stone-900">{dest.price}</span>
+                    </div>
+                    <span className="text-xs text-stone-500 font-normal">/ person</span>
                   </div>
-                  
+
                   <motion.button
                     onClick={() => onSelectDestination(dest)}
                     className="p-3 bg-stone-50 hover:bg-brand-500 text-stone-700 hover:text-white rounded-full transition-all duration-300 cursor-pointer"
